@@ -3,6 +3,15 @@ testGameSolved = "39178652458431269776254931865793418243982176512865794394627385
 
 DEBUG = True
 
+COLOUR = {
+    "given": "\033[38;5;244m",  # Grey
+    "user": "\033[38;5;15m",  # White
+    "conflict": "\033[38;5;196m",  # Red
+    "reset": "\033[0m",  # Reset colour to default
+}
+
+conflicts = []
+
 
 def debug(msg):
     if DEBUG:
@@ -11,20 +20,23 @@ def debug(msg):
 
 # Load board from string.
 def loadBoard(gameString):
-    # Create empty 9x9 grid
+    # Create empty 9x9 grid, and given mask
     board = [[0] * 9 for _ in range(9)]
+    given = [[False] * 9 for _ in range(9)]
 
-    # Fill rows/columns
+    # Fill board rows/columns and mask
     for i, digit in enumerate(gameString):
         row, column = divmod(i, 9)  # Returns (row, column) of index in the 9x9 grid.
 
-        board[row][column] = int(digit)
+        if digit in "123456789":
+            board[row][column] = int(digit)
+            given[row][column] = True
 
-    return board
+    return board, given
 
 
 # Return game array as printable string
-def drawBoard(board):
+def drawBoard(board, given):
     lines = []
 
     # Border styles
@@ -42,7 +54,15 @@ def drawBoard(board):
         line = []
         for col in range(len(board)):
             value = board[row][col]
-            cell = BLANK if value == 0 else str(value)  # Replace 0 with .
+
+            colour = COLOUR["user"]
+
+            if (row, col) in conflicts:
+                colour = COLOUR["conflict"]
+            elif given[row][col]:
+                colour = COLOUR["given"]
+
+            cell = BLANK if value == 0 else f"{colour}{value}{COLOUR["reset"]}"  
             line.append(cell)
 
             # Insert divider between boxes
@@ -66,21 +86,24 @@ def updateBoard(board, move):
     board[move[0]][move[1]] = move[2]
 
     return board
+    
 
-
-def validateBoard(board):
+def validateBoard(board, move):
     pass
 
 
-def validateRows():
+def validateRow(row):
+    for i in range(1, 10):
+        if row.count(i) > 1:
+            return row
+
+
+
+def validateColumn(col):
     pass
 
 
-def validateColumns():
-    pass
-
-
-def validateBoxes():
+def validateBox(box):
     pass
 
 
@@ -93,11 +116,13 @@ def playerInput():
     return (row - 1, col - 1, value)
 
 
-game1 = loadBoard(testGame)
+game, given = loadBoard(testGame)
+
+
 move = ""
 
 while move != exit:
-    print(drawBoard(game1))
+    print(drawBoard(game, given))
     move = playerInput()
 
-    game1 = updateBoard(game1, move)
+    game = updateBoard(game, move)
