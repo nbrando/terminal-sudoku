@@ -32,7 +32,9 @@ def draw_board(board):
         elif cell["given"]:
             colour = COLOUR["given"]
 
-        value = BLANK if cell["value"] == 0 else f"{colour}{cell['value']}{COLOUR['reset']}"
+        value = (
+            BLANK if cell["value"] == 0 else f"{colour}{cell['value']}{COLOUR['reset']}"
+        )
         line.append(value)
 
         # Insert divider between boxes
