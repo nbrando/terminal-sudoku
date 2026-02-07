@@ -10,10 +10,10 @@ def new_board(initial_values=None):
     board = []
     for i in range(81):
         if initial_values:
-            value = int(initial_values[i])
+            value = int(initial_values[i]) if initial_values[i] != "0" else None
             given = bool(value)
         else:
-            value = 0
+            value = None
             given = False
         board.append(make_cell(value=value, given=given))
 
