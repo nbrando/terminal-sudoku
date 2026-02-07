@@ -33,7 +33,9 @@ def draw_board(board):
             colour = COLOUR["given"]
 
         value = (
-            BLANK if cell["value"] == 0 else f"{colour}{cell['value']}{COLOUR['reset']}"
+            BLANK
+            if cell["value"] is None
+            else f"{colour}{cell['value']}{COLOUR['reset']}"
         )
         line.append(value)
 

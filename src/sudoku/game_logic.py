@@ -13,7 +13,7 @@ def update_board(board, move):
         return board
 
     # Apply the player's move
-    new_board[cell_index]["value"] = move[2]
+    new_board[cell_index]["value"] = move[2] if move[2] != 0 else None
 
     # Validate the board (recalculate all conflicts)
     return validate_board(new_board)
