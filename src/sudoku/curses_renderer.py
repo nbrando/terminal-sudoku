@@ -9,7 +9,7 @@ COLOUR_USER = curses.init_pair(2, curses.COLOR_WHITE, curses.COLOR_BLACK)
 COLOUR_CONFLICT = curses.init_pair(3, curses.COLOR_WHITE, curses.COLOR_RED)
 
 
-def draw_board(stdscr, board):
+def draw_board(stdscr, board, cursor_pos):
     # Border styles
     top = "┏━━━━━━━┯━━━━━━━┯━━━━━━━┓"
     middle = "┣━━━━━━━┿━━━━━━━┿━━━━━━━┫"
@@ -33,7 +33,12 @@ def draw_board(stdscr, board):
             value = BLANK if cell["value"] is None else str(cell['value'])
 
 
-            stdscr.addstr(y, x, value)
+            # Highlight cursor location. Also highlight left and right to make a wider cursor.
+            if cursor_pos and (row, col) == cursor_pos:
+                stdscr.addstr(y, x-1, f" {value} ", curses.A_STANDOUT)
+
+            else:
+                stdscr.addstr(y, x, value)
             x += 2
 
             if col in (2,5):
