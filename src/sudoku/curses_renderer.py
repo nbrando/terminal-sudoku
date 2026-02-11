@@ -1,6 +1,5 @@
 import curses
 
-
 # Colour pairs
 COLOUR_GIVEN = 1
 COLOUR_USER = 2

@@ -1,20 +1,24 @@
 import curses
 
-from curses_renderer import draw_board, init_colours
-from game_logic import update_board
-from model import new_board
+from sudoku.curses_renderer import draw_board, init_colours
+from sudoku.game_logic import update_board
+from sudoku.model import new_board
 
 
-def curses_main(stdscr):
+def run(puzzle):
+    def wrapped(stdscr):
+        return curses_main(stdscr, puzzle)
+    curses.wrapper(wrapped)
+
+
+def curses_main(stdscr, puzzle):
     curses.curs_set(0)  # Hide terminals default cursor
     stdscr.nodelay(False)
     stdscr.keypad(True)
 
     init_colours()
-
-    testboard = "300786024504002607062509008600030180030820760120050040046200050000090006005108000"
-
-    board = new_board(testboard)
+    
+    board = new_board(puzzle)
 
     cursor_row, cursor_col = 0, 0
 
@@ -56,4 +60,3 @@ def curses_main(stdscr):
             cursor_col += 1
 
 
-curses.wrapper(curses_main)
