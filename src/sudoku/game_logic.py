@@ -2,8 +2,10 @@ import copy
 
 
 # Enter value into cell
-def update_board(board, move):
-    new_board = copy.deepcopy(board)
+def update(game, move):
+    new_game = copy.deepcopy(game)
+
+    board = new_game["board"]
 
     # Convert 2D coordinates to 1D index for flat board
     cell_index = move[0] * 9 + move[1]  # ((Row * 9) + Column)
@@ -13,10 +15,15 @@ def update_board(board, move):
         return board
 
     # Apply the player's move
-    new_board[cell_index]["value"] = move[2] if move[2] != 0 else None
+    board[cell_index]["value"] = move[2] if move[2] != 0 else None
 
     # Validate the board (recalculate all conflicts)
-    return validate_board(new_board)
+    validate_board(board)
+
+    # Check if solved
+    new_game["solved"] = is_solved(board)
+
+    return new_game
 
 
 def validate_board(board):
@@ -25,8 +32,6 @@ def validate_board(board):
     check_rows(board)
     check_columns(board)
     check_boxes(board)
-
-    return board
 
 
 def clear_conflicts(board):
@@ -80,3 +85,11 @@ def check_boxes(board):
                     indices.append(row * 9 + column)
 
             mark_conflicts(board, indices)
+
+
+def is_solved(board):
+    # If board is full and no conflicts, the board is solved
+    for cell in board:
+        if cell["value"] not in range(1, 10) or cell["conflict"]:
+            return False
+    return True

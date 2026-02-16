@@ -18,3 +18,7 @@ def new_board(initial_values=None):
         board.append(make_cell(value=value, given=given))
 
     return board
+
+
+def new_game(initial_values=None):
+    return {"board": new_board(initial_values), "solved": False}

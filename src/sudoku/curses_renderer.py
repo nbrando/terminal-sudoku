@@ -11,10 +11,10 @@ def init_colours():
     curses.use_default_colors()
     curses.init_pair(COLOUR_GIVEN, curses.COLOR_CYAN, -1)
     curses.init_pair(COLOUR_USER, curses.COLOR_WHITE, -1)
-    curses.init_pair(COLOUR_CONFLICT, curses.COLOR_RED, -1) 
+    curses.init_pair(COLOUR_CONFLICT, curses.COLOR_RED, -1)
 
 
-def draw_board(stdscr, board, cursor_pos):
+def draw_board(stdscr, board, cursor_pos=None):
     # Border styles
     top = "┏━━━━━━━┯━━━━━━━┯━━━━━━━┓"
     middle = "┣━━━━━━━┿━━━━━━━┿━━━━━━━┫"
@@ -43,7 +43,6 @@ def draw_board(stdscr, board, cursor_pos):
                 attr = curses.color_pair(COLOUR_GIVEN)
             else:
                 attr = curses.color_pair(COLOUR_USER)
-
 
             # Highlight cursor location and left/right to make a wider cursor.
             if cursor_pos and (row, col) == cursor_pos:
