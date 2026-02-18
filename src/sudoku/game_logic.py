@@ -12,7 +12,7 @@ def update(game, move):
 
     if board[cell_index]["given"]:
         # Cannot modify pre-filled cells
-        return board
+        return game
 
     # Apply the player's move
     board[cell_index]["value"] = move[2] if move[2] != 0 else None
